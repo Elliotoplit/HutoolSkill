@@ -19,7 +19,7 @@ Hutool依赖导入
 </dependency>
 ```
 
-<!--mor
+<!--more-->
 
 ## 1.BeanUtil
 
