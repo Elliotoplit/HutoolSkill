@@ -1,4 +1,4 @@
-package org.elliot.hutoollearning.bean;
+package org.elliot.hutoollearning.demo;
 
 import cn.hutool.core.bean.BeanDesc;
 import cn.hutool.core.bean.BeanUtil;
