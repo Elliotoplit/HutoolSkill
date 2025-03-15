@@ -9,13 +9,58 @@ import java.util.*;
 /**
  * MapUtil
  * https://plus.hutool.cn/apidocs/cn/hutool/core/map/MapUtil.html
+ *
  * @author Elliot Lee
  * @since 2025/1/19
  */
 public class MapUtilDemo {
     public static void main(String[] args) {
-        Product product = new Product("B_Prod", "0", "100", "100","300");
-        Product product2 = new Product("C_Prod ", " 1", "10", "20","30");
+        Product product = new Product("B_Prod", "0", "100", "100", "300");
+        Product product2 = new Product("C_Prod ", " 1", "10", "20", "30");
+        Product product3 = new Product("C_Prod ", " 2", "10", "20", "30");
+        Product product4 = new Product("C_Prod ", " 2", "10", "20", "30");
+        Product product5 = new Product("D_Prod ", " 1", "10", "20", "30");
+        List<Product> dataList = List.of(product, product2, product3, product4, product5);
+
+        Map<String, List<Product>> listMap = new HashMap<>();
+        //Java.Map.putIfAbsent - 按照prodKey分组
+        for (Product rowData : dataList) {
+            String prodKey = prodKey(rowData.getProdName(), rowData.getProdVersion());
+            //方法1:
+            //listMap.putIfAbsent(prodKey, new ArrayList<>());
+            //listMap.get(prodKey).add(rowData);
+            //方法2:
+            listMap.compute(prodKey,(key,valueList)->{
+                if (Objects.isNull(valueList)) {
+                    valueList = new ArrayList<>();
+                }
+                valueList.add(rowData);
+                return valueList;
+            });
+        }
+
+
+
+        //Java.Map.compute - 按照prodName分组
+        Map<String, Integer> countMap = new HashMap<>();
+        Map<String, Integer> countMapForIfAbsent = new HashMap<>();
+        for (Product rowData : dataList) {
+            String prodKey = prodKey(rowData.getProdName(), rowData.getProdVersion());
+            countMap.compute(prodKey, (key, count) -> {
+                System.out.println("prodKey = " + prodKey );
+                System.out.println("key = " + key);
+                return Objects.isNull(count) ? 1 : count + 1;
+            });
+            countMapForIfAbsent.computeIfAbsent(prodKey, key -> {
+                System.out.println("prodKey = " + prodKey );
+                System.out.println("key = " + key);
+                return 1;
+            });
+        }
+
+
+
+
         Map<String, Object> prodMap = BeanUtil.beanToMap(product);
 
         //isEmpty - 判断Map是否为空 clear - 清空Map
@@ -36,7 +81,7 @@ public class MapUtilDemo {
         Map<String, Object> attributeMap = MapUtil.getAny(prodMap, "maxUsageCount", "maxRecycleCount", "maxPMUsageCount");
         System.out.println("attributeMap = " + attributeMap);
         //removeAny - 移除Map中的部分keys
-        MapUtil.removeAny(attributeMap,  "maxPMUsageCount");
+        MapUtil.removeAny(attributeMap, "maxPMUsageCount");
         System.out.println("removeAttributeMap = " + attributeMap);
         //removeNullValue - 移除Map中的null值entry
         attributeMap.put("maxPMUsageCount", null);
@@ -59,6 +104,9 @@ public class MapUtilDemo {
         List<String> values = MapUtil.valuesOfKeys(map, keys.iterator());
         System.out.println("values = " + values);
 
+    }
 
+    private static String prodKey(String prodName, String prodVersion) {
+        return prodName + "." + prodVersion;
     }
 }
