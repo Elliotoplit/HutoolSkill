@@ -1,6 +1,7 @@
 package org.elliot.hutoollearning.demo;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import org.elliot.hutoollearning.EntityBase.Product;
 
 import java.util.*;
@@ -104,8 +105,11 @@ public class CollUtilDemo {
         //fieldValueAsMap = Collectors.toMap
         Map<String, String> fieldValueAsMap = CollUtil.fieldValueAsMap(products, "prodName", "prodVersion");
         System.out.println("fieldValueAsMap = " + fieldValueAsMap);
-        Map<String, String> collect1 = products.stream()
-                                               .collect(Collectors.toMap(Product::getProdName, Product::getProdVersion));
+        Map<String, Product> collect1 = products.stream()
+                                               .collect(Collectors.toMap(prod -> StrUtil.join(".",prod.getProdName(),prod.getProdVersion()) ,
+                                                       product1 -> product1));
+        //Map<String, Product> collect1 = products.stream().collect(Collectors.toMap(Product::getProdName, Function.identity()));
+
         System.out.println("collect1 = " + collect1);
 
         //zip

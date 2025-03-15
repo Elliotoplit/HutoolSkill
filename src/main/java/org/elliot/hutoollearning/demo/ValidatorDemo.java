@@ -1,6 +1,7 @@
 package org.elliot.hutoollearning.demo;
 
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.NumberUtil;
 
 /**
  * Validator
@@ -30,5 +31,9 @@ public class ValidatorDemo {
         //isGeneral - 验证字符串长度范围
         boolean isGeneral = Validator.isGeneral("123456",1,6);
         System.out.println("isGeneral = " + isGeneral);
+
+        //isInteger - 验证整数
+        boolean isInteger = NumberUtil.isInteger("123456.0");
+        System.out.println("isInteger = " + isInteger);
     }
 }

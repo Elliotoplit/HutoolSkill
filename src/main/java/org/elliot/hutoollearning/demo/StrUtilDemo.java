@@ -26,7 +26,7 @@ public class StrUtilDemo {
 
         //uuid
         String uuid = StrUtil.uuid();
-        System.out.println("uuid = " + uuid);
+        System.out.println("uwuid = " + uuid);
 
 
     }
